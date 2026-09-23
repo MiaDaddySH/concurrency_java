@@ -33,24 +33,15 @@ public class ThreadStateExample {
 	public static void main(String[] args) throws InterruptedException {
 		/*
 		 * 控制 worker 什么时候结束 WAITING。
-		 *
-		 * worker 调用 await() 后进入 WAITING；
-		 * main 调用 countDown() 后将其唤醒。
+		 * worker 调用 await() 后进入 WAITING；main 调用 countDown() 后将其唤醒。
 		 */
 		CountDownLatch releaseWaiting = new CountDownLatch(1);
-
-		/*
-		 * 控制 worker 什么时候离开自旋，
-		 * 并尝试获得 MONITOR 锁。
-		 */
+		// 控制 worker 什么时候离开自旋， 并尝试获得 MONITOR 锁。
 		AtomicBoolean tryToAcquireLock = new AtomicBoolean(false);
 
 		Thread worker = new Thread(() -> {
 			try {
-				/*
-				 * 自旋期间，worker 一直在执行代码，
-				 * 因此保持 RUNNABLE。
-				 */
+				//自旋期间，worker 一直在执行代码，因此保持 RUNNABLE。
 				while (!tryToAcquireLock.get()) {
 					Thread.onSpinWait();
 				}
@@ -62,20 +53,11 @@ public class ThreadStateExample {
 				synchronized (MONITOR) {
 					log.info("worker 获得 MONITOR 锁");
 				}
-
-				/*
-				 * 计数器目前是 1，await() 会让 worker
-				 * 无限期等待，因此进入 WAITING。
-				 */
+				// 计数器目前是 1，await() 会让 worker无限期等待，因此进入 WAITING。
 				releaseWaiting.await();
-
-				/*
-				 * 带时间的休眠使 worker 进入 TIMED_WAITING。
-				 */
+				//带时间的休眠使 worker 进入 TIMED_WAITING。
 				TimeUnit.SECONDS.sleep(3);
-
 				log.info("worker 完成所有任务");
-
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				log.warn("worker 被中断");
@@ -84,13 +66,10 @@ public class ThreadStateExample {
 
 		// 已创建但尚未启动：NEW
 		logState("创建后", worker);
-
 		worker.start();
-
 		// worker 正在执行自旋代码：RUNNABLE
 		waitForState(worker, Thread.State.RUNNABLE);
 		logState("调用 start() 后", worker);
-
 		/*
 		 * main 先取得 MONITOR 锁，再通知 worker 尝试获取它。
 		 * 因为锁被 main 持有，所以 worker 进入 BLOCKED。
@@ -101,7 +80,6 @@ public class ThreadStateExample {
 			waitForState(worker, Thread.State.BLOCKED);
 			logState("等待 synchronized 锁时", worker);
 		}
-
 		/*
 		 * main 释放锁后，worker 获得锁并继续执行。
 		 * 随后调用 releaseWaiting.await()，进入 WAITING。
@@ -109,15 +87,10 @@ public class ThreadStateExample {
 		waitForState(worker, Thread.State.WAITING);
 		logState("调用 await() 后", worker);
 
-		/*
-		 * main 将计数器从 1 减为 0，唤醒 worker。
-		 */
+		// main 将计数器从 1 减为 0，唤醒 worker。
 		releaseWaiting.countDown();
 
-		/*
-		 * worker 被唤醒后调用 sleep(3)，
-		 * 因此进入 TIMED_WAITING。
-		 */
+		// worker 被唤醒后调用 sleep(3)，因此进入 TIMED_WAITING。
 		waitForState(worker, Thread.State.TIMED_WAITING);
 		logState("调用 sleep() 后", worker);
 
@@ -128,9 +101,7 @@ public class ThreadStateExample {
 		logState("run() 执行结束后", worker);
 	}
 
-	/**
-	 * 轮询线程状态，直到观察到预期状态。
-	 */
+	//轮询线程状态，直到观察到预期状态。
 	private static void waitForState(
 			Thread thread,
 			Thread.State expectedState

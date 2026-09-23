@@ -7,13 +7,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 演示 Thread 的中断机制。
- *
+ * <p>
  * interrupt()：
  *   向目标线程发出中断请求，不会强制终止线程。
- *
+ * <p>
  * isInterrupted()：
  *   查看某个线程的中断标记，不清除标记。
- *
+ * <p>
  * Thread.interrupted()：
  *   静态方法，查看当前线程的中断标记，并清除标记。
  */

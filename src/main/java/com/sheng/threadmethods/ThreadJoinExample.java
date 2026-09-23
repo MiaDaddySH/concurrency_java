@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 演示 join() 如何等待另一个线程结束。
- *
+ * <p>
  * 要点：
  * 1. 谁调用 join()，谁就进入等待；目标线程继续运行。
  * 2. join() 一直等待，直到目标线程结束。
