@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 使用同一个线程演示六种状态：
- *
+ * <p>
  * NEW
  * → RUNNABLE
  * → BLOCKED
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * → TIMED_WAITING
  * → RUNNABLE
  * → TERMINATED
- *
+ * <p>
  * 注意：
  * 1. getState() 得到的是线程在某一瞬间的状态。
  * 2. BLOCKED 专门表示等待 synchronized 的 monitor 锁。
@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 4. TIMED_WAITING 表示带有时间限制的等待。
  */
 @Slf4j
-public class ThreadStateExample1 {
+public class ThreadStateExample {
 
 	private static final Object MONITOR = new Object();
 
