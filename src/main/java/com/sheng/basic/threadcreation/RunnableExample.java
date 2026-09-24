@@ -1,4 +1,4 @@
-package com.sheng.threadcreation;
+package com.sheng.basic.threadcreation;
 
 import lombok.extern.slf4j.Slf4j;
 

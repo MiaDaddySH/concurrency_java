@@ -1,4 +1,4 @@
-package com.sheng.threadmethods;
+package com.sheng.basic.threadmethods;
 
 import lombok.extern.slf4j.Slf4j;
 
